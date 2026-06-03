@@ -27,3 +27,35 @@
         (t nil)
     )
 )
+
+;; ========================================================
+;; FUNCIÓN: timer
+;; NATURALEZA: Pura (Dado un timestamp, siempre retorna el mismo color)
+;; ESTRATEGIA: Seleccion simple
+;; IMPACTO: No destructiva
+;; ========================================================
+(defun timer (timestamp)
+    (if (numberp timestamp)
+    (let ((posicion (rem timestamp 216)))
+        (cond
+            ((<= posicion 89) 'rojo)
+            ((<= posicion 95) 'amarillo)
+            (t 'verde)
+        )
+    )
+    (format t "El timestamp debe ser un valor numérico")
+    )
+)
+
+;; ========================================================
+;; FUNCIÓN: obtener-timestamp
+;; NATURALEZA: Impura, dependiendo el momento de ser invocada, da un timestamp distinto
+;; ESTRATEGIA: Calculo aritmetico.
+;; IMPACTO: No destructiva
+;; ========================================================
+(defun obtener-timestamp ()
+    (- (get-universal-time)
+        ;segundos minutos horas fecha mes año
+        (encode-universal-time 0 0 0 1 1 1970)
+    )
+)
