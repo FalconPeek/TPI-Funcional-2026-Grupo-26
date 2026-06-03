@@ -82,3 +82,44 @@
 )
 
 (auditoria (timer (obtener-timestamp)))
+
+;; ========================================================
+;; FUNCIÓN: distribucion-temporal
+;; NATURALEZA: Pura. Calcula el porcentaje de tiempo de cada color durante un período determinado.
+;; ESTRATEGIA: Estructura de Control Condicional y Cálculo Aritmético.
+;; IMPACTO: No destructiva
+;; ========================================================
+
+(defun distribucion-temporal (horas)
+
+    (if (or (not (numberp horas)) (<= horas 0))
+        '(error parametro-invalido)
+
+        (let* ((tiempo-total (* horas 3600))
+             (ciclos (floor (/ tiempo-total 216)))
+             (resto (mod tiempo-total 216))
+
+             (rojo (+ (* ciclos 90)
+                      (min resto 90)))
+             (amarillo (+ (* ciclos 6)
+                          (max 0
+                               (min 6
+                                    (- resto 90)))))
+             (verde (+ (* ciclos 120)
+                       (max 0
+                            (min 120
+                                 (- resto 96))))))
+        (list
+            (list 'rojo
+                (/ (round (* (/ rojo tiempo-total) 10000))
+                    100.0))
+            (list 'amarillo
+                (/ (round (* (/ amarillo tiempo-total) 10000))
+                    100.0))
+            (list 'verde
+                (/ (round (* (/ verde tiempo-total) 10000))
+                    100.0)))
+        )
+    )
+
+)
