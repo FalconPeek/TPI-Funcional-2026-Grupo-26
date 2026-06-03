@@ -59,3 +59,26 @@
         (encode-universal-time 0 0 0 1 1 1970)
     )
 )
+
+;; ========================================================
+;; FUNCIÓN: auditoria
+;; NATURALEZA: Impura. El mensaje devuelto es distito cuando se registra un cambio
+;; ESTRATEGIA: Recursion de cola
+;; IMPACTO: No destructiva
+;; ========================================================
+(defun auditoria (color-inicio)
+    (sleep 6)
+    (format t "~% testeando..")
+    (let ((color-nuevo (timer (obtener-timestamp))))
+        (cond
+            ((not (equal color-inicio color-nuevo)) 
+                (format t "~% Tiempo ~a: La luz ha cambiado de ~a a ~a"
+                (obtener-timestamp) color-inicio color-nuevo)
+                (auditoria color-nuevo)
+            )
+            (t (auditoria color-inicio))
+        )
+    )
+)
+
+(auditoria (timer (obtener-timestamp)))
