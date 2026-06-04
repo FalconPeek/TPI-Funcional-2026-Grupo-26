@@ -21,12 +21,12 @@
 ;; ========================================================
 (defun validar-transiciones-p (color-actual cambiar-a)
     (cond
-        ((and (equal color-actual 'en-rojo) (equal cambiar-a 'rojo-intermitente)) t)
-        ((and (equal color-actual 'en-rojo-intermitente) (equal cambiar-a 'amarillo)) t)
-        ((and (equal color-actual 'en-amarillo) (equal cambiar-a 'amarillo-intermitente)) t)
-        ((and (equal color-actual 'en-amarillo-intermitente) (equal cambiar-a 'verde)) t)
-        ((and (equal color-actual 'en-verde) (equal cambiar-a 'verde-intermitente)) t)
-        ((and (equal color-actual 'en-verde-intermitente) (equal cambiar-a 'rojo)) t)
+        ((and (equal color-actual 'rojo) (equal cambiar-a 'rojo-intermitente)) t)
+        ((and (equal color-actual 'rojo-intermitente) (equal cambiar-a 'amarillo)) t)
+        ((and (equal color-actual 'amarillo) (equal cambiar-a 'amarillo-intermitente)) t)
+        ((and (equal color-actual 'amarillo-intermitente) (equal cambiar-a 'verde)) t)
+        ((and (equal color-actual 'verde) (equal cambiar-a 'verde-intermitente)) t)
+        ((and (equal color-actual 'verde-intermitente) (equal cambiar-a 'rojo)) t)
         (t nil)
     )
 )
