@@ -66,7 +66,7 @@
 
 ;; ========================================================
 ;; FUNCIÓN: auditoria
-;; NATURALEZA: Impura. El mensaje devuelto es distito cuando se registra un cambio
+;; NATURALEZA: Impura. El mensaje devuelto es distinto cuando se registra un cambio
 ;; ESTRATEGIA: Recursion de cola
 ;; IMPACTO: No destructiva
 ;; ========================================================
@@ -75,10 +75,21 @@
     (format t "~% testeando..")
     (let ((color-nuevo (timer (obtener-timestamp))))
         (cond
-            ((not (equal color-inicio color-nuevo)) 
-                (format t "~% Tiempo ~a: La luz ha cambiado de ~a a ~a"
-                (obtener-timestamp) color-inicio color-nuevo)
-                (auditoria color-nuevo)
+            ((not (equal color-inicio color-nuevo))
+                (let ((timestamp (obtener-timestamp)))
+
+                    (format t "~% Tiempo ~a: La luz ha cambiado de ~a a ~a"
+                            timestamp
+                            color-inicio
+                            color-nuevo)
+
+                    (informe-cronologico-semaforo
+                     timestamp
+                     color-inicio
+                     color-nuevo)
+
+                    (auditoria color-nuevo)
+                )
             )
             (t (auditoria color-inicio))
         )
@@ -153,3 +164,4 @@
         )
     )
 )
+
