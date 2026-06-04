@@ -15,15 +15,18 @@
 
 ;; ========================================================
 ;; FUNCIÓN: validar-transiciones-p
-;; NATURALEZA: Pura, recibe eñ estado actual y el nuevo, luego analiza si la transicion es valida o no, devuelve t o nil respectivamente
+;; NATURALEZA: Pura, recibe el estado actual y el nuevo, luego analiza si la transicion es valida o no, devuelve t o nil respectivamente
 ;; ESTRATEGIA: Función predicado
 ;; IMPACTO: no destructiva
 ;; ========================================================
 (defun validar-transiciones-p (color-actual cambiar-a)
     (cond
-        ((and (equal color-actual 'en-rojo) (equal cambiar-a 'verde)) t)
-        ((and (equal color-actual 'en-verde) (equal cambiar-a 'amarillo)) t)
-        ((and (equal color-actual 'en-amarillo) (equal cambiar-a 'rojo)) t)
+        ((and (equal color-actual 'en-rojo) (equal cambiar-a 'rojo-intermitente)) t)
+        ((and (equal color-actual 'en-rojo-intermitente) (equal cambiar-a 'amarillo)) t)
+        ((and (equal color-actual 'en-amarillo) (equal cambiar-a 'amarillo-intermitente)) t)
+        ((and (equal color-actual 'en-amarillo-intermitente) (equal cambiar-a 'verde)) t)
+        ((and (equal color-actual 'en-verde) (equal cambiar-a 'verde-intermitente)) t)
+        ((and (equal color-actual 'en-verde-intermitente) (equal cambiar-a 'rojo)) t)
         (t nil)
     )
 )
@@ -36,13 +39,14 @@
 ;; ========================================================
 (defun timer (timestamp)
     (if (numberp timestamp)
-    (let ((posicion (rem timestamp 216)))
+    (let ((posicion (rem timestamp 225)))
         (cond
-            ((<= posicion 89) 'rojo)
-            ((<= posicion 95) 'amarillo)
-            (t 'verde)
-        )
-    )
+           ((< posicion 90) 'rojo)
+           ((< posicion 93) 'rojo-intermitente)
+           ((< posicion 99) 'amarillo)
+           ((< posicion 102) 'amarillo-intermitente)
+           ((< posicion 222) 'verde)
+           (t 'verde-intermitente)))
     (format t "El timestamp debe ser un valor numérico")
     )
 )
@@ -99,27 +103,53 @@
              (ciclos (floor (/ tiempo-total 216)))
              (resto (mod tiempo-total 216))
 
-             (rojo (+ (* ciclos 90)
+                (rojo (+ (* ciclos 90)
                       (min resto 90)))
-             (amarillo (+ (* ciclos 6)
+
+               (rojo-intermitente (+ (* ciclos 3)
+                                   (max 0
+                                        (min 3
+                                             (- resto 90)))))
+
+               (amarillo (+ (* ciclos 6)
                           (max 0
                                (min 6
                                     (- resto 90)))))
+
+              (amarillo-intermitente (+ (* ciclos 3)
+                                       (max 0
+                                            (min 3
+                                                 (- resto 99)))))
+
              (verde (+ (* ciclos 120)
                        (max 0
                             (min 120
                                  (- resto 96))))))
+
+             (verde-intermitente (+ (* ciclos 3)
+                                    (max 0
+                                         (min 3
+                                              (- resto 222))))))
+
         (list
             (list 'rojo
                 (/ (round (* (/ rojo tiempo-total) 10000))
                     100.0))
+             (list 'rojo-intermitente
+                (/ (round (* (/ rojo-intermitente tiempo-total) 10000))
+                    100.0))
             (list 'amarillo
                 (/ (round (* (/ amarillo tiempo-total) 10000))
                     100.0))
+            (list 'amarillo-intermitente
+                (/ (round (* (/ amarillo-intermitente tiempo-total) 10000))
+                    100.0))
             (list 'verde
                 (/ (round (* (/ verde tiempo-total) 10000))
-                    100.0)))
+                    100.0))
+        (list 'verde-intermitente
+                (/ (round (* (/ verde-intermitente tiempo-total) 10000))
+                    100.0))
         )
     )
-
 )
