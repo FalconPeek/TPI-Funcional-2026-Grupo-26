@@ -85,7 +85,6 @@
     )
 )
 
-(auditoria (timer (obtener-timestamp)))
 
 ;; ========================================================
 ;; FUNCIÓN: distribucion-temporal
