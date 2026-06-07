@@ -13,6 +13,7 @@
     )
 )
 
+
 ;; ========================================================
 ;; FUNCIÓN: validar-transiciones-p
 ;; NATURALEZA: Pura, recibe el estado actual y el nuevo, luego analiza si la transicion es valida o no, devuelve t o nil respectivamente
@@ -85,8 +86,6 @@
     )
 )
 
-(auditoria (timer (obtener-timestamp)))
-
 ;; ========================================================
 ;; FUNCIÓN: distribucion-temporal
 ;; NATURALEZA: Pura. Calcula el porcentaje de tiempo de cada color durante un período determinado.
@@ -100,8 +99,8 @@
         '(error parametro-invalido)
 
         (let* ((tiempo-total (* horas 3600))
-             (ciclos (floor (/ tiempo-total 216)))
-             (resto (mod tiempo-total 216))
+             (ciclos (floor (/ tiempo-total 225)))
+             (resto (mod tiempo-total 225))
 
                 (rojo (+ (* ciclos 90)
                       (min resto 90)))
@@ -124,12 +123,13 @@
              (verde (+ (* ciclos 120)
                        (max 0
                             (min 120
-                                 (- resto 96))))))
+                                 (- resto 96)))))
 
              (verde-intermitente (+ (* ciclos 3)
                                     (max 0
                                          (min 3
-                                              (- resto 222))))))
+                                              (- resto 222)))))
+        )
 
         (list
             (list 'rojo
@@ -147,9 +147,47 @@
             (list 'verde
                 (/ (round (* (/ verde tiempo-total) 10000))
                     100.0))
-        (list 'verde-intermitente
+            (list 'verde-intermitente
                 (/ (round (* (/ verde-intermitente tiempo-total) 10000))
                     100.0))
         )
+
     )
-)
+))
+;; ========================================================
+;; REQUERIMIENTO 7 - ASEGURAMIENTO DE LA CALIDAD
+;; ========================================================
+
+;; R1 - validar-transiciones-p
+
+(validar-transiciones-p 'rojo 'rojo-intermitente) ; funcionamiento normal
+(validar-transiciones-p 'verde 'verde-intermitente) ; camino alternativo
+(validar-transiciones-p 'rojo 'verde) ; error
+
+;; R2 - transicion
+    
+(transicion 'rojo 'rojo-intermitente) ; funcionamiento normal
+(transicion 'amarillo-intermitente 'verde) ; camino alternativo
+(transicion 'rojo 'verde) ; error
+
+;; R3 - timer
+
+(timer 50) ; funcionamiento normal
+(timer 95) ; camino alternativo
+(timer 'hola) ; error
+
+;; R4 - obtener-timestamp
+
+(obtener-timestamp) ; funcionamiento normal
+(obtener-timestamp) ; camino alternativo
+
+;; R6 - distribucion-temporal
+
+(distribucion-temporal 1) ; funcionamiento normal
+(distribucion-temporal 24) ; camino alternativo
+(distribucion-temporal 'hola) ; error
+
+;; R5 - auditoria
+
+;(auditoria (timer (obtener-timestamp))) ; funcionamiento normal
+;(auditoria 'verde) ; camino alternativo
