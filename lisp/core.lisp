@@ -71,6 +71,16 @@
 )
 
 ;; ========================================================
+;; FUNCIÓN: formatear-timestamp
+;; NATURALEZA: Pura. Para un mismo timestamp siempre devuelve el mismo resultado.
+;; ESTRATEGIA: Aplicación de función de librería.
+;; IMPACTO: No destructiva.
+;; ========================================================
+(defun formatear-timestamp (timestamp)
+  (local-time:unix-to-timestamp timestamp))
+
+
+;; ========================================================
 ;; FUNCIÓN: auditoria
 ;; NATURALEZA: Impura. El mensaje devuelto es distito cuando se registra un cambio
 ;; ESTRATEGIA: Recursion de cola
@@ -83,7 +93,7 @@
         (cond
             ((not (equal color-inicio color-nuevo)) 
                 (format t "~% Tiempo ~a: La luz ha cambiado de ~a a ~a"
-                (obtener-timestamp) color-inicio color-nuevo)
+                (formatear-timestamp (obtener-timestamp)) color-inicio color-nuevo)
                 (auditoria color-nuevo)
             )
             (t (auditoria color-inicio))
