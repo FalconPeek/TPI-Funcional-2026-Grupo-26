@@ -65,6 +65,11 @@
     )
 )
 
+;;obtener timestamp usand local-time
+(defun obtener-timestamp()
+    (local-time:timestamp-to-unix (local-time:now))
+)
+
 ;; ========================================================
 ;; FUNCIÓN: auditoria
 ;; NATURALEZA: Impura. El mensaje devuelto es distito cuando se registra un cambio
