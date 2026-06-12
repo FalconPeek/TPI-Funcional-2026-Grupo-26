@@ -147,62 +147,67 @@
         '(error parametro-invalido)
 
         (let* ((tiempo-total (* horas 3600))
-             (ciclos (floor (/ tiempo-total 225)))
-             (resto (mod tiempo-total 225))
+               (ciclos (floor (/ tiempo-total 225)))
+               (resto (mod tiempo-total 225))
 
-                (rojo (+ (* ciclos 90)
-                      (min resto 90)))
+               (verde (+ (* ciclos 120)
+                         (min resto 120)))
+
+               (verde-intermitente (+ (* ciclos 3)
+                                      (max 0
+                                           (min 3
+                                                (- resto 120)))))
+
+               (rojo (+ (* ciclos 90)
+                        (max 0
+                             (min 90
+                                  (- resto 123)))))
+
 
                (rojo-intermitente (+ (* ciclos 3)
-                                   (max 0
-                                        (min 3
-                                             (- resto 90)))))
+                                     (max 0
+                                          (min 3
+                                               (- resto 213)))))
+
 
                (amarillo (+ (* ciclos 6)
-                          (max 0
-                               (min 6
-                                    (- resto 90)))))
+                            (max 0
+                                 (min 6
+                                      (- resto 216)))))
 
-              (amarillo-intermitente (+ (* ciclos 3)
-                                       (max 0
-                                            (min 3
-                                                 (- resto 99)))))
 
-             (verde (+ (* ciclos 120)
-                       (max 0
-                            (min 120
-                                 (- resto 96)))))
+               (amarillo-intermitente (+ (* ciclos 3)
+                                         (max 0
+                                              (min 3
+                                                   (- resto 222))))))
+        
 
-             (verde-intermitente (+ (* ciclos 3)
-                                    (max 0
-                                         (min 3
-                                              (- resto 222)))))
-        )
-
-        (list
-            (list 'rojo
-                (/ (round (* (/ rojo tiempo-total) 10000))
-                    100.0))
-             (list 'rojo-intermitente
-                (/ (round (* (/ rojo-intermitente tiempo-total) 10000))
-                    100.0))
-            (list 'amarillo
-                (/ (round (* (/ amarillo tiempo-total) 10000))
-                    100.0))
-            (list 'amarillo-intermitente
-                (/ (round (* (/ amarillo-intermitente tiempo-total) 10000))
-                    100.0))
+          (list
             (list 'verde
-                (/ (round (* (/ verde tiempo-total) 10000))
-                    100.0))
-            (list 'verde-intermitente
-                (/ (round (* (/ verde-intermitente tiempo-total) 10000))
-                    100.0))
-        )
+                  (/ (round (* (/ verde tiempo-total) 10000))
+                     100.0))
 
+            (list 'verde-intermitente
+                  (/ (round (* (/ verde-intermitente tiempo-total) 10000))
+                     100.0))
+
+            (list 'rojo
+                  (/ (round (* (/ rojo tiempo-total) 10000))
+                     100.0))
+
+            (list 'rojo-intermitente
+                  (/ (round (* (/ rojo-intermitente tiempo-total) 10000))
+                     100.0))
+
+            (list 'amarillo
+                  (/ (round (* (/ amarillo tiempo-total) 10000))
+                     100.0))
+
+            (list 'amarillo-intermitente
+                  (/ (round (* (/ amarillo-intermitente tiempo-total) 10000))
+                     100.0)))
     )
 ))
-
 ;; ========================================================
 ;; REQUERIMIENTO 7 - ASEGURAMIENTO DE LA CALIDAD
 ;; ========================================================
