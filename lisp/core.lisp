@@ -79,6 +79,39 @@
 (defun formatear-timestamp (timestamp)
   (local-time:unix-to-timestamp timestamp))
 
+;; ========================================================
+;; FUNCIÓN: duracion-ciclo
+;; NATURALEZA: Pura (Retorna siempre el mismo valor para los mismos parámetros)
+;; ESTRATEGIA: Funciones de Orden Superior (Uso de reduce)
+;; IMPACTO: No destructiva
+;; ========================================================
+(defun duracion-ciclo (lista-tiempos)
+  (reduce #'+ lista-tiempos))
+
+;; ========================================================
+;; FUNCIÓN: recomendacion-ciclo
+;; NATURALEZA: Pura 
+;; ESTRATEGIA: Condicional / Predicativa
+;; IMPACTO: No destructiva
+;; ========================================================
+(defun recomendacion-ciclo (duracion)
+  (cond ((< duracion 35) 
+         "Evitar: Ciclo demasiado corto (menor a 35s). Estrés para el conductor.")
+        ((> duracion 150) 
+         "Evitar: Ciclo demasiado largo (mayor a 150s). Fomenta infracciones.")
+        (t 
+         "Recomendado: Ciclo dentro del rango óptimo (35s - 150s).")))
+
+;; ========================================================
+;; FUNCIÓN: ciclos-por-tiempo
+;; NATURALEZA: Pura
+;; ESTRATEGIA: Función matemática simple con entorno léxico local (LET)
+;; IMPACTO: No destructiva
+;; ========================================================
+(defun ciclos-por-tiempo (minutos duracion-un-ciclo)
+  (let ((segundos-totales (* minutos 60)))
+    (values (floor (/ segundos-totales duracion-un-ciclo)))))
+
 
 ;; ========================================================
 ;; FUNCIÓN: auditoria
@@ -169,31 +202,6 @@
 
     )
 ))
-
-;; ========================================================
-;; FUNCIÓN: duracion-ciclo
-;; NATURALEZA: Pura (Retorna siempre el mismo valor para los mismos parámetros)
-;; ESTRATEGIA: Funciones de Orden Superior (Uso de reduce)
-;; IMPACTO: No destructiva
-;; ========================================================
-(defun duracion-ciclo (lista-tiempos)
-  "Calcula la duración total de un ciclo sumando la lista de tiempos en segundos."
-  (reduce #'+ lista-tiempos))
-
-;; ========================================================
-;; FUNCIÓN: recomendacion-ciclo
-;; NATURALEZA: Pura 
-;; ESTRATEGIA: Condicional / Predicativa
-;; IMPACTO: No destructiva
-;; ========================================================
-(defun recomendacion-ciclo (duracion)
-  "Retorna una recomendación basada en los estándares de ingeniería de tráfico."
-  (cond ((< duracion 35) 
-         "Evitar: Ciclo demasiado corto (menor a 35s). Estrés para el conductor.")
-        ((> duracion 150) 
-         "Evitar: Ciclo demasiado largo (mayor a 150s). Fomenta infracciones.")
-        (t 
-         "Recomendado: Ciclo dentro del rango óptimo (35s - 150s).")))
 
 ;; ========================================================
 ;; REQUERIMIENTO 7 - ASEGURAMIENTO DE LA CALIDAD
