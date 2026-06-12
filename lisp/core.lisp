@@ -180,9 +180,6 @@
   "Calcula la duración total de un ciclo sumando la lista de tiempos en segundos."
   (reduce #'+ lista-tiempos))
 
-;; Ejemplo de uso esperado por QA:
-;; (duracion-ciclo '(90 6 120)) -> 216
-
 ;; ========================================================
 ;; REQUERIMIENTO 7 - ASEGURAMIENTO DE LA CALIDAD
 ;; ========================================================
