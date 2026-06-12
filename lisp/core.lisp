@@ -181,6 +181,21 @@
   (reduce #'+ lista-tiempos))
 
 ;; ========================================================
+;; FUNCIÓN: recomendacion-ciclo
+;; NATURALEZA: Pura 
+;; ESTRATEGIA: Condicional / Predicativa
+;; IMPACTO: No destructiva
+;; ========================================================
+(defun recomendacion-ciclo (duracion)
+  "Retorna una recomendación basada en los estándares de ingeniería de tráfico."
+  (cond ((< duracion 35) 
+         "Evitar: Ciclo demasiado corto (menor a 35s). Estrés para el conductor.")
+        ((> duracion 150) 
+         "Evitar: Ciclo demasiado largo (mayor a 150s). Fomenta infracciones.")
+        (t 
+         "Recomendado: Ciclo dentro del rango óptimo (35s - 150s).")))
+
+;; ========================================================
 ;; REQUERIMIENTO 7 - ASEGURAMIENTO DE LA CALIDAD
 ;; ========================================================
 
