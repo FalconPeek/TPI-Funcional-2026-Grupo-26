@@ -13,7 +13,6 @@
     )
 )
 
-
 ;; ========================================================
 ;; FUNCIÓN: validar-transiciones-p
 ;; NATURALEZA: Pura, recibe el estado actual y el nuevo, luego analiza si la transicion es valida o no, devuelve t o nil respectivamente
@@ -21,15 +20,26 @@
 ;; IMPACTO: no destructiva
 ;; ========================================================
 (defun validar-transiciones-p (color-actual cambiar-a)
-    (cond
-        ((and (equal color-actual 'verde) (equal cambiar-a 'verde-intermitente)) t)
-        ((and (equal color-actual 'verde-intermitente) (equal cambiar-a 'rojo)) t)
-        ((and (equal color-actual 'rojo) (equal cambiar-a 'rojo-intermitente)) t)
-        ((and (equal color-actual 'rojo-intermitente) (equal cambiar-a 'amarillo)) t)
-        ((and (equal color-actual 'amarillo) (equal cambiar-a 'amarillo-intermitente)) t)
-        ((and (equal color-actual 'amarillo-intermitente) (equal cambiar-a 'verde)) t)
-        (t nil)
-    )
+  (cond
+    ((and (equal color-actual 'rojo)
+          (equal cambiar-a 'rojo-intermitente))
+     t)
+    ((and (equal color-actual 'rojo-intermitente)
+          (equal cambiar-a 'verde))
+     t)
+    ((and (equal color-actual 'verde)
+          (equal cambiar-a 'verde-intermitente))
+     t)
+    ((and (equal color-actual 'verde-intermitente)
+          (equal cambiar-a 'amarillo))
+     t)
+    ((and (equal color-actual 'amarillo)
+          (equal cambiar-a 'amarillo-intermitente))
+     t)
+    ((and (equal color-actual 'amarillo-intermitente)
+          (equal cambiar-a 'rojo))
+     t)
+    (t nil))
 )
 
 ;; ========================================================
@@ -39,17 +49,16 @@
 ;; IMPACTO: No destructiva
 ;; ========================================================
 (defun timer (timestamp)
-    (if (numberp timestamp)
-    (let ((posicion (rem timestamp 225)))
+  (if (numberp timestamp)
+      (let ((posicion (rem timestamp 225)))
         (cond
-           ((< posicion 120) 'verde)
-           ((< posicion 123) 'verde-intermitente)
-           ((< posicion 213) 'rojo)
-           ((< posicion 216) 'rojo-intermitente)
-           ((< posicion 222) 'amarillo)
-           (t 'amarillo-intermitente)))
-    (format t "El timestamp debe ser un valor numérico")
-    )
+          ((< posicion 90) 'rojo)
+          ((< posicion 93) 'rojo-intermitente)
+          ((< posicion 213) 'verde)
+          ((< posicion 216) 'verde-intermitente)
+          ((< posicion 222) 'amarillo)
+          (t 'amarillo-intermitente)))
+      (format t "El timestamp debe ser un valor numérico"))
 )
 
 ;; ========================================================
@@ -77,7 +86,29 @@
 ;; IMPACTO: No destructiva.
 ;; ========================================================
 (defun formatear-timestamp (timestamp)
-  (local-time:unix-to-timestamp timestamp))
+  (local-time:unix-to-timestamp timestamp)
+)
+
+;; ========================================================
+;; FUNCIÓN: auditoria
+;; NATURALEZA: Impura. El mensaje devuelto es distito cuando se registra un cambio
+;; ESTRATEGIA: Recursion de cola
+;; IMPACTO: No destructiva
+;; ========================================================
+(defun auditoria (color-inicio)
+    (sleep 6)
+    (format t "~% testeando..")
+    (let ((color-nuevo (timer (obtener-timestamp))))
+        (cond
+            ((not (equal color-inicio color-nuevo)) 
+                (format t "~% Tiempo ~a: La luz ha cambiado de ~a a ~a"
+                (formatear-timestamp (obtener-timestamp)) color-inicio color-nuevo)
+                (auditoria color-nuevo)
+            )
+            (t (auditoria color-inicio))
+        )
+    )
+)
 
 ;; ========================================================
 ;; FUNCIÓN: duracion-ciclo
@@ -111,28 +142,6 @@
 (defun ciclos-por-tiempo (minutos duracion-un-ciclo)
   (let ((segundos-totales (* minutos 60)))
     (values (floor (/ segundos-totales duracion-un-ciclo)))))
-
-
-;; ========================================================
-;; FUNCIÓN: auditoria
-;; NATURALEZA: Impura. El mensaje devuelto es distito cuando se registra un cambio
-;; ESTRATEGIA: Recursion de cola
-;; IMPACTO: No destructiva
-;; ========================================================
-(defun auditoria (color-inicio)
-    (sleep 6)
-    (format t "~% testeando..")
-    (let ((color-nuevo (timer (obtener-timestamp))))
-        (cond
-            ((not (equal color-inicio color-nuevo)) 
-                (format t "~% Tiempo ~a: La luz ha cambiado de ~a a ~a"
-                (formatear-timestamp (obtener-timestamp)) color-inicio color-nuevo)
-                (auditoria color-nuevo)
-            )
-            (t (auditoria color-inicio))
-        )
-    )
-)
 
 ;; ========================================================
 ;; FUNCIÓN: distribucion-temporal
