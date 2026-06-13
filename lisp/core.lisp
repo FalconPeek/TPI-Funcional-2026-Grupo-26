@@ -48,8 +48,12 @@
 ;; ESTRATEGIA: Seleccion simple
 ;; IMPACTO: No destructiva
 ;; ========================================================
+
+;;NOTA: Para correr en SBCL se debe cambiar el nombre de esta funcion ya que 'timer' es una palabra reservada en el mismo.
+;;      Necesario para probar funcion utilizando la variante con Local-time
 (defun timer (timestamp)
-  (if (numberp timestamp)
+  (typecase timestamp
+    (number
       (let ((posicion (rem timestamp 225)))
         (cond
           ((< posicion 90) 'rojo)
@@ -57,8 +61,8 @@
           ((< posicion 213) 'verde)
           ((< posicion 216) 'verde-intermitente)
           ((< posicion 222) 'amarillo)
-          (t 'amarillo-intermitente)))
-      (format t "El timestamp debe ser un valor numérico"))
+          (t 'amarillo-intermitente)) ))
+    (t (format t "El timestamp debe ser un valor numérico")))
 )
 
 ;; ========================================================
