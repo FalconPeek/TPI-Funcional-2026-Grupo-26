@@ -67,12 +67,6 @@
 ;; ESTRATEGIA: Calculo aritmetico.
 ;; IMPACTO: No destructiva
 ;; ========================================================
-(defun obtener-timestamp ()
-    (- (get-universal-time)
-        ;segundos minutos horas fecha mes año
-        (encode-universal-time 0 0 0 1 1 1970)
-    )
-)
 
 ;;obtener timestamp usand local-time
 (defun obtener-timestamp()
