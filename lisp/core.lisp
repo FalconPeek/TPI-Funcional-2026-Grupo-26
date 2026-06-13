@@ -90,7 +90,11 @@
 ;; IMPACTO: No destructiva.
 ;; ========================================================
 (defun formatear-timestamp (timestamp)
-  (local-time:unix-to-timestamp timestamp)
+  (local-time:format-timestring
+    nil
+    (local-time:unix-to-timestamp timestamp)
+    :format '((:year 4) "-" (:month 2) "-" (:day 2) " " (:hour 2) ":" (:min 2) ":" (:sec 2))
+  )
 )
 
 ;; ========================================================
