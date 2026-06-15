@@ -7,7 +7,7 @@ Este repositorio contiene el desarrollo del **Trabajo Práctico Integrador 2026 
 
 ## Integrantes del Grupo 26
 
-🔹 **Bruno Leandro** - **GitHub: BrunoDiaz7**
+🔹 **Diaz Bruno Leandro** - **GitHub: BrunoDiaz7**
 
 🔹 **Lucas Agustín Lindström Suñol** - **GitHub: FalconPeek**
 
