@@ -115,6 +115,16 @@
     :format '((:year 4) "-" (:month 2) "-" (:day 2) " " (:hour 2) ":" (:min 2) ":" (:sec 2))
   )
 )
+;; ========================================================
+;; FUNCIÓN: crear-registro
+;; NATURALEZA: Pura. Construye una estructura de datos que representa un evento de transición del sistema semafórico.
+;; ESTRATEGIA: Construcción de lista (mapping directo de valores a estructura).
+;; IMPACTO: No destructiva
+;; ========================================================
+(defun crear-registro (timestamp color-actual color-nuevo)
+  (list (formatear-timestamp timestamp)
+        color-actual
+        color-nuevo))
 
 ;; ========================================================
 ;; FUNCIÓN: auditoria
@@ -122,24 +132,27 @@
 ;; ESTRATEGIA: Recursion de cola
 ;; IMPACTO: No destructiva
 ;; ========================================================
-(defun auditoria (color-inicio ciclos)
+(defun auditoria (color-inicio ciclos log)
   (if (= ciclos 0)
-    (format t "~%Auditoría finalizada.~%")
-    (let* ((timestamp (obtener-timestamp))
-          (espera (segundos-hasta-cambio timestamp)))
+      (progn
+        (informe log)
+        (format t "~%Auditoría finalizada. Log guardado.~%"))
+      
+      (let* ((timestamp (obtener-timestamp))
+             (espera (segundos-hasta-cambio timestamp)))
 
-      (sleep espera)
-      (let* ((nuevo-timestamp (obtener-timestamp))
-            (color-nuevo (timer nuevo-timestamp)))
-        (format t "~%Tiempo ~a: La luz ha cambiado de ~a a ~a~%"
+        (sleep espera)
+
+        (let* ((nuevo-timestamp (obtener-timestamp))
+               (color-nuevo (timer nuevo-timestamp))
+               (registro (crear-registro nuevo-timestamp color-inicio color-nuevo)))
+
+          (format t "~%Tiempo ~a: La luz cambió de ~a a ~a~%"
                   (formatear-timestamp nuevo-timestamp)
                   color-inicio
                   color-nuevo)
-        (auditoria color-nuevo (- ciclos 1))
-      )
-    )
-  )
-)
+
+          (auditoria color-nuevo (- ciclos 1) (cons registro log))))))
 
 ;; ========================================================
 ;; FUNCIÓN: duracion-ciclo
