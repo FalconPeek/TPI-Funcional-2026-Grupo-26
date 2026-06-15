@@ -43,6 +43,25 @@
 )
 
 ;; ========================================================
+;; FUNCIÓN: segundos-hasta-cambio
+;; NATURALEZA: Pura, calcula la cantidad de segundos que faltan para que ocurra un cambio de estado
+;; ESTRATEGIA: Calculo aritmetico
+;; IMPACTO: No destructiva
+;; ========================================================
+(defun segundos-hasta-cambio (timestamp)
+  (let ((posicion (rem timestamp 225)))
+    (cond
+      ((< posicion 90) (- 90 posicion))
+      ((< posicion 93) (- 93 posicion))
+      ((< posicion 213) (- 213 posicion))
+      ((< posicion 216) (- 216 posicion))
+      ((< posicion 222) (- 222 posicion))
+      (t (- 225 posicion))
+    )
+  )
+)
+
+;; ========================================================
 ;; FUNCIÓN: timer
 ;; NATURALEZA: Pura (Dado un timestamp, siempre retorna el mismo color)
 ;; ESTRATEGIA: Seleccion simple
@@ -103,19 +122,23 @@
 ;; ESTRATEGIA: Recursion de cola
 ;; IMPACTO: No destructiva
 ;; ========================================================
-(defun auditoria (color-inicio)
-    (sleep 6)
-    (format t "~% testeando..")
-    (let ((color-nuevo (timer (obtener-timestamp))))
-        (cond
-            ((not (equal color-inicio color-nuevo)) 
-                (format t "~% Tiempo ~a: La luz ha cambiado de ~a a ~a"
-                (formatear-timestamp (obtener-timestamp)) color-inicio color-nuevo)
-                (auditoria color-nuevo)
-            )
-            (t (auditoria color-inicio))
-        )
+(defun auditoria (color-inicio ciclos)
+  (if (= ciclos 0)
+    (format t "~%Auditoría finalizada.~%")
+    (let* ((timestamp (obtener-timestamp))
+          (espera (segundos-hasta-cambio timestamp)))
+
+      (sleep espera)
+      (let* ((nuevo-timestamp (obtener-timestamp))
+            (color-nuevo (timer nuevo-timestamp)))
+        (format t "~%Tiempo ~a: La luz ha cambiado de ~a a ~a~%"
+                  (formatear-timestamp nuevo-timestamp)
+                  color-inicio
+                  color-nuevo)
+        (auditoria color-nuevo (- ciclos 1))
+      )
     )
+  )
 )
 
 ;; ========================================================
