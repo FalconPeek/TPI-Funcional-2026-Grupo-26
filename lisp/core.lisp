@@ -127,6 +127,29 @@
         color-nuevo))
 
 ;; ========================================================
+;; FUNCIÓN: informe
+;; NATURALEZA: Impura. Realiza persistencia de datos escribiendo el log de transiciones en un archivo de texto plano.
+;; ESTRATEGIA: Escritura secuencial utilizando with-open-file y recorrido con dolist.
+;; IMPACTO: No destructiva en memoria, pero con efecto colateral en el sistema de archivos (creación/escritura de archivo externo).
+;; ========================================================
+(defun informe (datos)
+  (with-open-file (stream "informe-ejecucion-semaforo.txt"
+                          :direction :output
+                          :if-exists :supersede
+                          :if-does-not-exist :create)
+
+    (format stream "Informe de Ejecución del Sistema Semafórico~%")
+    (format stream "=========================================~%")
+
+    (dolist (registro (reverse datos))
+      (format stream "~a - Transición: ~a -> ~a~%"
+              (first registro)
+              (second registro)
+              (third registro)))
+
+    (format stream "~%--- Fin del Informe ---~%")))
+
+;; ========================================================
 ;; FUNCIÓN: auditoria
 ;; NATURALEZA: Impura. El mensaje devuelto es distito cuando se registra un cambio
 ;; ESTRATEGIA: Recursion de cola
