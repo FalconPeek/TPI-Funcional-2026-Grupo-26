@@ -21,7 +21,7 @@ Este repositorio contiene el desarrollo del **Trabajo Práctico Integrador 2026 
 
 ## Defensa y Demostración Técnica
 
- **Video de Defensa (YouTube):** [Enlace al Video de la Demo Técnica](https://www.youtube.com/) 
+ **Video de Defensa (YouTube):** [Enlace al Video de la Demo Técnica](https://www.youtube.com/watch?v=aKfTws83R7A) 
     *(Exposición sintética del entorno de software).*
 
 ---
