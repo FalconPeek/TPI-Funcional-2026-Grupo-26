@@ -1,5 +1,9 @@
 ;; codigos con los requerimientos en fase 1
 
+;;cargar local-time
+(find-package :ql)
+(ql:quickload "local-time")
+
 ;; ========================================================
 ;; FUNCIÓN: transicion
 ;; NATURALEZA: Pura. Recibe el estado actual y el siguente, devuelve la accion de cambiar si la transicion es valida.
@@ -90,14 +94,6 @@
 ;; ESTRATEGIA: Calculo aritmetico.
 ;; IMPACTO: No destructiva
 ;; ========================================================
-(defun obtener-timestamp ()
-    (- (get-universal-time)
-        ;segundos minutos horas fecha mes año
-        (encode-universal-time 0 0 0 1 1 1970)
-    )
-)
-
-;;obtener timestamp usand local-time
 (defun obtener-timestamp()
     (local-time:timestamp-to-unix (local-time:now))
 )
@@ -112,9 +108,11 @@
   (local-time:format-timestring
     nil
     (local-time:unix-to-timestamp timestamp)
+    :timezone local-time:+utc-zone+
     :format '((:year 4) "-" (:month 2) "-" (:day 2) " " (:hour 2) ":" (:min 2) ":" (:sec 2))
   )
 )
+
 ;; ========================================================
 ;; FUNCIÓN: crear-registro
 ;; NATURALEZA: Pura. Construye una estructura de datos que representa un evento de transición del sistema semafórico.
